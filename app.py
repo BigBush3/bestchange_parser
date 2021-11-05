@@ -1,21 +1,20 @@
 from flask import Flask
-import requests
-from bs4 import BeautifulSoup
+from io import BytesIO
+from zipfile import ZipFile
+from urllib.request import urlopen
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    rs = requests.get('http://api.scraperapi.com/?api_key=60c8bd0701f81a48bf8a2fd08e79c35e&url=https://www.bestchange.ru/ripple-to-yoomoney.html')
-    root = BeautifulSoup(rs.content, 'html.parser')
-
-    for tr in root.select('#content_table > tbody > tr'):
-        name = tr.select_one('td.bj .pc .ca').get_text(strip=True)
-        [give_el, get_el] = tr.select('td.bi')
-        give = give_el.select_one('.fs').get_text(strip=True)
-        get = get_el.get_text(strip=True)
-        print(name, give, get, sep=' | ')
+    resp = urlopen('http://api.bestchange.ru/info.zip')
+    zipfile = ZipFile(BytesIO(resp.read()))
+    data = zipfile.read('bm_rates.dat')
+    with open(data) as zipfile:
+        for line in zipfile:
+            line_list = line.strip('\n').split(';')
+            print(f'{float (line_list [0])}   {float (line_list [1]):.5f}')
 
     return "Hello, World!"
 
