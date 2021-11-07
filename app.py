@@ -25,8 +25,7 @@ def index():
         totalDir = {}
         for item in input_json:
             
-            idSell = int("".join([str(i["id"])
-                                for i in value if i["key"] == item["give"]]))
+            idSell = int(i["id"] for i in value if i["key"] == item["give"])
             idBuy = int("".join([str(i["id"])
                                 for i in value if i["key"] == item["get"]]))
             strValue = []
