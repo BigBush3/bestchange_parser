@@ -24,11 +24,14 @@ def index():
         value = json.load(f)
         totalDir = {}
         for item in input_json:
-            
-            idSell = (int("".join([str(i["id"])])) for i in value if i["key"] == item["give"])
-            print(idSell)
-            idBuy = int("".join([str(i["id"])
-                                for i in value if i["key"] == item["get"]]))
+            idSell = 0
+            idBuy = 0
+            for i in value:
+                if (i['key'] == item['give']):
+                    idSell = i['id']
+            for i in value:
+                if (i['key'] == item['get']):
+                    idBuy = i['id']
             strValue = []
             
             for i in lst:
@@ -38,13 +41,13 @@ def index():
                 if float(i[3]) > float(i[4]):
                     sortedStrValueDown = sorted(
                     strValue, key=lambda x: (-float(x[4]), float(x[3])))
-                    sortedStrValueDown = [i[3 : 5] for i in sortedStrValueDown[:3]]
+                    sortedStrValueDown = [i[3 : 5] for i in sortedStrValueDown[:5]]
                     totalDir[item["give"] + '-' + item["get"]] = sortedStrValueDown
                     break
                 elif float(i[3]) < float(i[4]):
                     sortedStrValueUp = sorted(
                     strValue, key=lambda x: (-float(x[4]), float(x[3])))
-                    sortedStrValueUp = [i[3 : 5] for i in sortedStrValueUp[:3]]
+                    sortedStrValueUp = [i[3 : 5] for i in sortedStrValueUp[:5]]
                     totalDir[item["give"] + '-' + item["get"]] = sortedStrValueUp
                     break
     os.remove("./bm_rates.dat")
