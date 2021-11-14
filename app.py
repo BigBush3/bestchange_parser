@@ -11,8 +11,9 @@ app = Flask(__name__)
 @app.route('/', methods=["POST"])
 def index():
     input_json = request.get_json(force=True)
-    print(input_json)
+    print('start')
     resp = urlopen('http://api.bestchange.ru/info.zip')
+    print('done')
     zipFile = ZipFile(BytesIO(resp.read()))
     zipFile.extract('bm_rates.dat')
     with open("bm_rates.dat", "r", encoding="windows-1251") as data_file:
