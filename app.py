@@ -7,13 +7,11 @@ import json
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=["POST"])
 def index():
     input_json = request.get_json(force=True)
-    print('start')
+    print(input_json)
     resp = urlopen('http://api.bestchange.ru/info.zip')
-    print('done')
     zipFile = ZipFile(BytesIO(resp.read()))
     zipFile.extract('bm_rates.dat')
     with open("bm_rates.dat", "r", encoding="windows-1251") as data_file:
@@ -52,6 +50,7 @@ def index():
                     totalDir[item["give"] + '-' + item["get"]] = sortedStrValueUp
                     break
     os.remove("./bm_rates.dat")
+    print(totalDir)
     return jsonify(totalDir)
     
 
